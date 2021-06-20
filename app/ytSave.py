@@ -13,6 +13,3 @@ def saveVideo(src):
     vids.download(savePath, filename='newVideo_{}'.format(hash_.hexdigest()))
 
     return hash_
-
-saveVideo('https://www.youtube.com/watch?v=o-9_r_jTxJs')
-
