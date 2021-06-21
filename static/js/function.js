@@ -34,6 +34,10 @@ function move(time) {
     player.setAttribute('src', `https://youtube.com/embed/${splitVideoId(link.value)}?autoplay=1&start=${time}`);
 }
 
+function setHref(base, second) {
+    return `${base}?autoplay=1&start=${second}`;
+}
+
 function sendData() {
     const img = document.getElementById('img-file')
 
@@ -50,34 +54,38 @@ function sendData() {
     fetch('/api/startAnalyze', config)
     .then((res) => {
         res.json().then((data) => {
+            const base = player.getAttribute('src');
             const result = document.getElementById('result-div');
             const cos = data.result_cos;
             const eunc = data.result_eunc;
             const path = data.path;
 
-            // Array.from(cos).forEach((item) => {
-            //     console.log(item[0], item[1])
+            Array.from(cos).forEach((item) => {
+                const split = item[1].split('/')
+                const second = split[split.length-1].split('.')[0]
+                const a = document.createElement('a')
 
-            //     const img = document.createElement('img')
-            //     const li = document.createElement('li');
-
-            //     img.setAttribute('src', `{{ url_for(filename="${JSON.parse(item[1])}") }}`)
-            //     li.setAttribute('class', 'result-cos');
-            //     li.appendChild(img);
-            //     result_ul_cos.appendChild(li);
-            // })
+                result_ul_cos.appendChild(a);
+                a.addEventListener('click', () => {
+                    player.setAttribute('src', setHref(base, second));
+                });
+                a.innerText = second + ' ';
+            })
 
             // Array.from(eunc).forEach((item) => {
-            //     const img = document.createElement('img')
-            //     const li = document.createElement('li');
+            //     const split = item[1].split('/')
+            //     const second = split[split.length-1].split('.')[0]
+            //     const a = document.createElement('a')
 
-            //     img.setAttribute('src', `{{ url_for(filename="${JSON.parse(item[1])}") }}`)
-            //     li.setAttribute('class', 'result-eunc');
-            //     li.appendChild(img);
-            //     result_ul_eunc.appendChild(li);
+            //     result_ul_eunc.appendChild(a);
+            //     a.addEventListener('click', () => {
+            //         player.setAttribute('src', setHref(base, second));
+            //     });
+            //     a.innerText = second + ' ';
             // })
 
-            // result.appendChild('ul')
+            result.appendChild(result_ul_cos);
+            // result.appendChild(result_ul_eunc);
         })
     })
 }
