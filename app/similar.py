@@ -14,7 +14,7 @@ from pathlib import Path
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
-import os, cv2
+import os
 
 # 특징 추출할때 사용할 모델 선택
 def setModel(model):
@@ -47,25 +47,7 @@ def feature_extractor(model, img):
     feature = model.predict(x)[0]
     return feature / np.linalg.norm(feature)
 
-# 비디오로 데이터베이스를 만들고 싶을때
-def extractFrame(video):
-    vid = cv2.VideoCapture('./{}.mp4'.format(video))
-    count = 0
-    
-    if not os.path.exists(video):
-        os.mkdir('./{}'.format(video))
-    
-    while True:
-        ret, image = vid.read()
-        
-        if (int(vid.get(1)) % 30 == 0):
-            cv2.imwrite('./{}/'.format(video) + '{}.jpg'.format(count), image)
-            count += 1
-            
-        if not ret:
-            break
-            
-    vid.release()
+
 
 # 특정 디렉토리 내의 이미지들 경로를 추출
 def setImageDB_li(dirName):

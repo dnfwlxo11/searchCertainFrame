@@ -1,8 +1,7 @@
 tensorflow==2.4.0
 numpy==1.19.3
 Pillow==8.2.0
-opencv-python
-flask
-pytube
-hashlib
-matplotlib
+opencv-python==4.5.2.54
+flask==2.0.1
+pytube==10.8.5
+matplotlib==3.4.2

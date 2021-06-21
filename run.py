@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from app import similar, ytSave
+from app import similar, ytSave, splitVideo
 
 app = Flask(__name__)
 
@@ -10,8 +10,10 @@ def index():
 @app.route('/api/startAnalyze', methods=['POST', 'GET'])
 def getSimilarPart():
     if (request.method == 'POST'):
-        ytSave.saveVideo(request.form['url'])
-        return 'asd'
+        videoId = ytSave.saveVideo(request.form['url'])
+        videoId = splitVideo.extractFrame('newVideo_{}'.format(videoId))
+
+    return 'abs'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=15000, debug=True)
