@@ -60,7 +60,7 @@ function sendData() {
             const eunc = data.result_eunc;
             const path = data.path;
 
-            Array.from(cos).forEach((item) => {
+            Array.from(cos).sort().forEach((item) => {
                 const split = item[1].split('/')
                 const second = split[split.length-1].split('.')[0]
                 const a = document.createElement('a')
@@ -69,7 +69,8 @@ function sendData() {
                 a.addEventListener('click', () => {
                     player.setAttribute('src', setHref(base, second));
                 });
-                a.innerText = second + ' ';
+
+                a.innerText = second;
             })
 
             // Array.from(eunc).forEach((item) => {
@@ -79,9 +80,11 @@ function sendData() {
 
             //     result_ul_eunc.appendChild(a);
             //     a.addEventListener('click', () => {
-            //         player.setAttribute('src', setHref(base, second));
+            //         if (second !== 0 || second !== (data.len -1)) {
+                        //     player.setAttribute('src', setHref(base, second));
+                        //     a.innerText = second/3600 + '시간 ' + second%3600/60 + '분 ' + second%3600%60 + '초';
+                        // }
             //     });
-            //     a.innerText = second + ' ';
             // })
 
             result.appendChild(result_ul_cos);

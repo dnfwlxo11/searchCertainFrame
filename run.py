@@ -28,8 +28,8 @@ def getSimilarPart():
         result_eunc = [(str(k), v) for (k, v) in result_eunc]
 
         result_cos.reverse()
-        
-    return {'success':'true', 'path': request.form['url'], 'result_cos': result_cos[:10], 'result_eunc': result_eunc[:10]}
+
+    return {'success':'true', 'path': request.form['url'], 'result_cos': result_cos[:10], 'result_eunc': result_eunc[:10], 'len': len(result_cos)}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=15000, debug=True)

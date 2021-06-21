@@ -5,27 +5,58 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>시간은 없고, 어딘가 있긴하고</title>
 </head>
 
 <body>
     <div id="wrapper">
-        <div id="video-div">
-            <input id="video-link" type="text"></input>
-            <button onclick="getVideo()">동영상 가져오기</button>
-            <iframe id='player' width="640px" height="360px"
-                src="{{ url_for('static', filename='asset/thumbnail.png') }}" frameborder="0"></iframe>
+        <div class="top">
+            <div id="video-div">
+                <h2>찾을 동영상</h2>
+                <iframe id='player' src="{{ url_for('static', filename='asset/thumbnail.png') }}"
+                    frameborder="0"></iframe>
+                <div id="input-div">
+                    <input id="input" type="file"></input>
+                    <button id="input-btn" onclick="getVideo()">내 동영상 가져오기</button>
+                </div>
+                <div id="input-div">
+                    <input id="input" type="text"></input>
+                    <button id="input-btn" onclick="getVideo()">동영상 가져오기</button>
+                </div>
+            </div>
+            <div id="img-div">
+                <h2>찾고자 하는 대상</h2>
+                <iframe name="fake" style="width:1px; height:1px; border:0; visibility:hidden;"></iframe>
+                <img id="thumbnail" src="{{ url_for('static', filename='asset/thumbnail.png') }}" width="300px">
+                <div id="input-div">
+                    <input id="input-file" name='file' type="file" accept="image/*">
+                    <input id="input" name='url' type="text" value=""></a>
+                    <button id="input-btn" onclick="sendData()">분석 시작</button>
+                </div>
+            </div>
+            <div id="result-div">
+                <h2>예상되는 재생 시간</h2>
+                <ul id="result-ul-cos"></ul>
+                <ul id="result-ul-eunc"></ul>
+            </div>
         </div>
-        <div id="img-div">
-            <iframe name="fake" style="width:1px; height:1px; border:0; visibility:hidden;"></iframe>
-            <img id="thumbnail" src="{{ url_for('static', filename='asset/thumbnail.png') }}" width="300px">
-            <input id="img-file" name='file' type="file" accept="image/*">
-            <input id="hidden-url" name='url' type="text" value=""></a>
-            <button onclick="sendData()">분석 시작</button>
-        </div>
-        <div id="result-div">
-            <ul id="result-ul-cos"></ul>
-            <ul id="result-ul-eunc"></ul>
+        <div class="bottom">
+            <div id="option">
+                <div id="combo">
+                    <select name="language">
+                        <option value="none">=== 모델 선택 ===</option>
+                        <option value="korean">VGG16</option>
+                        <option value="english">ResNet50</option>
+                        <option value="chinese">InceptionV3</option>
+                        <option value="spanish">EfficientNet-B0</option>
+                    </select>
+                </div>
+                <div id="radio">
+                    <input type="radio" name="similar_calc" value="cos">Cosin 유사도
+                    <input type="radio" name="similar_calc" value="cos">Euclidian 유사도
+                </div>
+            </div>
         </div>
     </div>
 </body>
