@@ -21,7 +21,7 @@
                     <button id="input-btn" onclick="getVideo()">내 동영상 가져오기</button>
                 </div>
                 <div id="input-div">
-                    <input id="input" type="text"></input>
+                    <input id="video-link" type="text"></input>
                     <button id="input-btn" onclick="getVideo()">동영상 가져오기</button>
                 </div>
             </div>
@@ -30,8 +30,8 @@
                 <iframe name="fake" style="width:1px; height:1px; border:0; visibility:hidden;"></iframe>
                 <img id="thumbnail" src="{{ url_for('static', filename='asset/thumbnail.png') }}" width="300px">
                 <div id="input-div">
-                    <input id="input-file" name='file' type="file" accept="image/*">
-                    <input id="input" name='url' type="text" value=""></a>
+                    <input id="img-file" name='file' type="file" accept="image/*">
+                    <input id="hidden-url" name='url' type="text" value=""></a>
                     <button id="input-btn" onclick="sendData()">분석 시작</button>
                 </div>
             </div>
@@ -41,20 +41,35 @@
                 <ul id="result-ul-eunc"></ul>
             </div>
         </div>
+        <br>
         <div class="bottom">
             <div id="option">
                 <div id="combo">
+                    <h5>예측시 사용할 모델</h5>
                     <select name="language">
                         <option value="none">=== 모델 선택 ===</option>
-                        <option value="korean">VGG16</option>
-                        <option value="english">ResNet50</option>
-                        <option value="chinese">InceptionV3</option>
-                        <option value="spanish">EfficientNet-B0</option>
+                        <option value="VGG16">VGG16</option>
+                        <option value="ResNet50">ResNet50</option>
+                        <option value="InceptionV3">InceptionV3</option>
+                        <option value="EfficientNet-B0">EfficientNet-B0</option>
                     </select>
                 </div>
                 <div id="radio">
-                    <input type="radio" name="similar_calc" value="cos">Cosin 유사도
-                    <input type="radio" name="similar_calc" value="cos">Euclidian 유사도
+                    <h5>예측시 사용할 유사도 공식</h5>
+                    <input type="radio" name="similar_calc" value="cos" checked>Cosin 유사도
+                    <input type="radio" name="similar_calc" value="eucn">Euclidian 유사도
+                </div>
+                <div id="radio">
+                    <h5>찾을 동영상의 FPS</h5>
+                    <input type="radio" name="video_fps" value="24" checked>24FPS
+                    <input type="radio" name="video_fps" value="30">30FPS
+                    <input type="radio" name="video_fps" value="60">60FPS
+                </div>
+                <div id="radio">
+                    <h5>결과값의 개수</h5>
+                    <input type="radio" name="predict_li" value="3">3개
+                    <input type="radio" name="predict_li" value="5">5개
+                    <input type="radio" name="predict_li" value="10" checked>10개
                 </div>
             </div>
         </div>

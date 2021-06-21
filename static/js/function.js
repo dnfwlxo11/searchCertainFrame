@@ -8,7 +8,6 @@ const file = document.getElementById('img-file'),
 
 hidden_url.hidden = true;
 
-
 file.onchange = () => {
     let reader = new FileReader();
 
@@ -60,13 +59,17 @@ function sendData() {
             const eunc = data.result_eunc;
             const path = data.path;
 
-            Array.from(cos).sort().forEach((item) => {
-                const split = item[1].split('/')
-                const second = split[split.length-1].split('.')[0]
-                const a = document.createElement('a')
+            cos.reverse();
 
-                result_ul_cos.appendChild(a);
-                a.addEventListener('click', () => {
+            Array.from(cos).forEach((item) => {
+                const split = item[1].split('/');
+                const second = split[split.length-1].split('.')[0];
+                const a = document.createElement('a');
+                const li = document.createElement('li');
+
+                li.appendChild(a)
+                result_ul_cos.appendChild(li);
+                li.addEventListener('click', () => {
                     player.setAttribute('src', setHref(base, second));
                 });
 

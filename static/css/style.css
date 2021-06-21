@@ -6,16 +6,24 @@ html, body {
     text-align: center;
 }
 
+li {
+    margin-top: 10px;
+    padding: 10px;
+}
+
 #wrapper {
-    margin: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 100%;
 }
 
 .top {
-    height: 90%;
+    height: 80%;
 }
 
 .bottom {
-    height: 10%;
+    display: flex;
+    align-items: center;
 }
 
 #player {
@@ -35,7 +43,7 @@ html, body {
     float: left;
 }
 
-#input {
+#input, #hidden-url, #video-link, #image-link {
     width: 50%;
 }
 
@@ -45,4 +53,23 @@ html, body {
 
 #input-div {
     margin: 10px;
+}
+
+#result-div {
+    width: 20%;
+    float: left;
+}
+
+#result-div li {
+    background-color: cornflowerblue;
+}
+
+#option {
+    text-align: center;
+    margin-left: 50vh;
+}
+
+#combo, #radio {
+    float: left;
+    margin-right: 50px;
 }
