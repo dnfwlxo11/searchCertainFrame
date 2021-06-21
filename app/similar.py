@@ -33,8 +33,6 @@ def setModel(model):
     else:
         print('{} 모델은 없거나 지원하지 않습니다.'.format(model))
     
-    return model
-    
 # 이미지에서 특성 추출
 def feature_extractor(model, img):
     img = Image.open(img)
@@ -50,20 +48,20 @@ def feature_extractor(model, img):
 
 
 # 특정 디렉토리 내의 이미지들 경로를 추출
-def setImageDB_li(dirName):
-    imageDB_li = os.listdir('./{}/'.format(dirName))
-    imageDB_li = [os.getcwd() + '/{}/'.format(dirName) + image for image in imageDB_li]
+def getImageDB_li(dirName):
+    imageDB_li = os.listdir('static/{}/{}/'.format(dirName, dirName))
+    imageDB_li = ['static/{}/{}/'.format(dirName, dirName) + image for image in imageDB_li]
     
     return imageDB_li
 
 # 이미지 데이터베이스에서 특징을 추출하여 *.npy 형식으로 추출
-def getImageDB(imageDB_li, dirName):
+def setImageDB(imageDB_li, dirName):
     if not os.path.exists(dirName + '_npy'):
-        os.mkdir('./{}_npy'.format(dirName))
+        os.mkdir('static/{}/{}_npy'.format(dirName, dirName))
     for img in sorted(imageDB_li):
         feature = feature_extractor(model, img)
 
-        feature_path = './{}_npy/'.format(dirName) + img.split('/')[-1].split('.')[0] + '.npy'
+        feature_path = 'static/{}/{}_npy/'.format(dirName, dirName) + img.split('/')[-1].split('.')[0] + '.npy'
         np.save(feature_path, feature)
 
 # 코사인 유사도
@@ -77,9 +75,9 @@ def euclidean(features, query):
 def getFeatureAndPath(dirName):
     features = []
     img_path = []
-    for img_npy in Path('./{}_npy/'.format(dirName)).glob('*.npy'):
+    for img_npy in Path('static/{}/{}_npy/'.format(dirName, dirName)).glob('*.npy'):
         features.append(np.load(img_npy))
-        img_path.append(os.path.join('./{}/'.format(dirName), img_npy.stem + '.jpg'))
+        img_path.append(os.path.join('static/{}/{}/'.format(dirName, dirName), img_npy.stem + '.jpg'))
         
     return features, img_path
         
@@ -88,11 +86,11 @@ def calc_euclienan(features, img_path, src):
     query = feature_extractor(model, src)
     result = euclidean(features, query)
     
-    ids = np.argsort(result)[:27]
-    print(len(ids))
+    ids = np.argsort(result)
     scores = [(result[id], img_path[id]) for id in ids]
-    
-    draw_graph(result, scores, 'eunc')
+    print('Eunclidean similarity')
+
+    return scores
 
 # 코사인 유사도 계산
 def calc_cossim(features, img_path, src):
@@ -101,11 +99,13 @@ def calc_cossim(features, img_path, src):
     for feature in features:
         result.append(cos_sim(feature, query))
 
-    ids = np.argsort(result)[-27:]
+    ids = np.argsort(result)
     print(len(ids))
     scores = [(result[id], img_path[id]) for id in ids]
     
-    draw_graph(result, scores, 'cos')
+    print('Cosine similarity')
+    
+    return scores
     
 # 그래프를 그림
 def draw_graph(result, scores, title):
@@ -125,11 +125,5 @@ def draw_graph(result, scores, title):
     fig.tight_layout()
     plt.show()
 
-# ex.
-# model = setModel('InceptionV3')
-# extractFrame('vincenzo')
-
-# getImageDB(setImageDB_li('vincenzo'), 'vincenzo')
-# features, img_path = getFeatureAndPath('vincenzo')
-# calc_cossim(features, img_path, './song.jpg')
-# calc_euclienan(features, img_path, './song.jpg')
+model = VGG16(weights='imagenet')
+model = Model(inputs=model.input, outputs=model.get_layer('fc1').output)
