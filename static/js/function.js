@@ -8,7 +8,8 @@ const file = document.getElementById('img-file'),
     calc = document.getElementsByName('similar_calc'),
     resol = document.getElementsByName('video_res'),
     fps = document.getElementsByName('video_fps'),
-    len = document.getElementsByName('predict_li');
+    len = document.getElementsByName('predict_li'),
+    speed = document.getElementById('mode');
 
 hidden_url.hidden = true;
 
@@ -47,10 +48,16 @@ function getOptions() {
         calc: '',
         fps: 0,
         len: 0,
-        resol: ''
+        resol: '',
+        mode: 'normal'
     };
 
     result.model = model.options[model.selectedIndex].text
+
+    if (speed.checked)
+        result.mode = 'speed'
+    else
+        result.mode = 'normal'
 
     Array.from(calc).forEach(item => {
         if (item.checked) {
@@ -125,6 +132,7 @@ function sendData() {
     data.append('fps', result.fps);
     data.append('resol', result.resol);
     data.append('len', result.len);
+    data.append('mode', result.mode);
 
     const config = {
         method: 'POST',
@@ -139,10 +147,8 @@ function sendData() {
                 if (data.success) {
                     if (data.mode === 'cos') {
                         setPredict(data.result_cos);
-                        console.log('cos')
                     } else {
                         setPredict(data.result_eucl);
-                        console.log('eucl')
                     }
                 } else {
                     const msg = data.err === 'none_resol' ? '해당 동영상은 선택하신 해상도를 지원하지 않습니다.' : data.err === 'none_fps' ? '해당 동영상은 선택하신 fps를 지원하지 않습니다.' : '1시간 이상의 동영상은 서비스하지 않습니다.'

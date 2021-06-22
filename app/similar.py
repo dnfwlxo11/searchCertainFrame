@@ -72,6 +72,7 @@ def euclidean(features, query):
     return np.linalg.norm(features - query, axis=1)
 
 def speedMode(dirName, src, len):
+    print('스피드 모드')
     query = np.sum(feature_extractor(model, src))
 
     features = []
@@ -100,6 +101,8 @@ def speedMode(dirName, src, len):
     return speed_features[:int(len)], speed_imgPath[:int(len)]
 
 def getFeatureAndPath(dirName):
+    print('일반 모드')
+
     features = []
     img_path = []
     for img_npy in Path('static/{}/{}_npy/'.format(dirName, dirName)).glob('*.npy'):
@@ -115,7 +118,6 @@ def calc_euclienan(features, img_path, src):
     
     ids = np.argsort(result)
     scores = [(result[id], img_path[id]) for id in ids]
-    print('Eunclidean similarity')
 
     return scores
 
@@ -129,8 +131,6 @@ def calc_cossim(features, img_path, src):
     ids = np.argsort(result)
     print(len(ids))
     scores = [(result[id], img_path[id]) for id in ids]
-    
-    print('Cosine similarity')
     
     return scores
     

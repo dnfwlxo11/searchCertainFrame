@@ -22,13 +22,10 @@ def getSimilarPart():
             similar.setModel(req['model'])
             similar.setImageDB(similar.getImageDB_li(videoId), videoId)
 
-            # if (req['mode'] == 'speed')
-            #     features, img_path = similar.speedMode(videoId, 'static/{}/{}.jpg'.format(videoId, videoId))
-            # else
-            #     features, img_path = similar.getFeatureAndPath(videoId)
-
-            # features, img_path = similar.getFeatureAndPath(videoId)
-            features, img_path = similar.speedMode(videoId, 'static/{}/{}.jpg'.format(videoId, videoId), req['len'])
+            if (req['mode'] == 'speed'):
+                features, img_path = similar.speedMode(videoId, 'static/{}/{}.jpg'.format(videoId, videoId), int(req['len']))
+            else:
+                features, img_path = similar.getFeatureAndPath(videoId)
 
             if (req['calc'] == 'cos'):
                 result_cos = similar.calc_cossim(features, img_path, 'static/{}/{}.jpg'.format(videoId, videoId))
