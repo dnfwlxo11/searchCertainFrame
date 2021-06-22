@@ -15,6 +15,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import tensorflow as tf
 
 # 특징 추출할때 사용할 모델 선택
 def setModel(model):
@@ -98,7 +99,6 @@ def speedMode(dirName, src, len):
     print(speed_features, speed_imgPath)
     return speed_features[:int(len)], speed_imgPath[:int(len)]
 
-
 def getFeatureAndPath(dirName):
     features = []
     img_path = []
@@ -115,19 +115,22 @@ def calc_euclienan(features, img_path, src):
     
     ids = np.argsort(result)
     scores = [(result[id], img_path[id]) for id in ids]
+    print('Eunclidean similarity')
 
     return scores
 
 # 코사인 유사도 계산
 def calc_cossim(features, img_path, src):
     query = feature_extractor(model, src)
-
     result = []
     for feature in features:
         result.append(cos_sim(feature, query))
 
     ids = np.argsort(result)
+    print(len(ids))
     scores = [(result[id], img_path[id]) for id in ids]
+    
+    print('Cosine similarity')
     
     return scores
     
@@ -148,6 +151,15 @@ def draw_graph(result, scores, title):
 
     fig.tight_layout()
     plt.show()
+
+os.environ["CUDA_VISIBLE_DEVICES"]= '0, 1'
+
+physical_devices = tf.config.list_physical_devices('GPU')
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    tf.config.experimental.set_memory_growth(physical_devices[1], True)
+except:
+    pass
 
 model = VGG16(weights='imagenet')
 model = Model(inputs=model.input, outputs=model.get_layer('fc1').output)

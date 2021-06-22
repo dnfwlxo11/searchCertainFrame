@@ -27,8 +27,8 @@ def getSimilarPart():
             # else
             #     features, img_path = similar.getFeatureAndPath(videoId)
 
-            features, img_path = similar.getFeatureAndPath(videoId)
-            # features, img_path = similar.speedMode(videoId, 'static/{}/{}.jpg'.format(videoId, videoId), req['len'])
+            # features, img_path = similar.getFeatureAndPath(videoId)
+            features, img_path = similar.speedMode(videoId, 'static/{}/{}.jpg'.format(videoId, videoId), req['len'])
 
             if (req['calc'] == 'cos'):
                 result_cos = similar.calc_cossim(features, img_path, 'static/{}/{}.jpg'.format(videoId, videoId))
