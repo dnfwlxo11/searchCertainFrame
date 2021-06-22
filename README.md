@@ -6,7 +6,7 @@ How to install? (어떻게 설치하나?)
 
 ```  
 1. git clone https://github.com/dnfwlxo11/searchCertainFrame.git  
-(Whatever you do locally or in conda, use comfortable way)  
+   (Whatever you do local or in conda, use comfortable way)  
 2. cd searchCertainFrame  
 3. pip install -r requirements.txt  
 4. python run.py  
