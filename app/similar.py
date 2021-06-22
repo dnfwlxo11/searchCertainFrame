@@ -70,6 +70,35 @@ def cos_sim(a, b):
 def euclidean(features, query):
     return np.linalg.norm(features - query, axis=1)
 
+def speedMode(dirName, src, len):
+    query = np.sum(feature_extractor(model, src))
+
+    features = []
+    img_path = []
+    for img_npy in Path('static/{}/{}_npy/'.format(dirName, dirName)).glob('*.npy'):
+        features.append(np.load(img_npy))
+        img_path.append(os.path.join('static/{}/{}/'.format(dirName, dirName), img_npy.stem + '.jpg'))
+
+    features_dict = {}
+    cnt = 0
+    for item in features:
+        features_dict[cnt] = abs(np.sum(item) - query)
+        cnt+=1
+
+    features_dict = sorted(features_dict.items(), key=(lambda x:x[1]))
+
+    speed_features = []
+    speed_imgPath = []
+    keys_ = list(dict(features_dict).keys())
+
+    for index in keys_:
+        speed_features.append(features[index])
+        speed_imgPath.append(img_path[index])
+
+    print(speed_features, speed_imgPath)
+    return speed_features[:int(len)], speed_imgPath[:int(len)]
+
+
 def getFeatureAndPath(dirName):
     features = []
     img_path = []
@@ -86,22 +115,19 @@ def calc_euclienan(features, img_path, src):
     
     ids = np.argsort(result)
     scores = [(result[id], img_path[id]) for id in ids]
-    print('Eunclidean similarity')
 
     return scores
 
 # 코사인 유사도 계산
 def calc_cossim(features, img_path, src):
     query = feature_extractor(model, src)
+
     result = []
     for feature in features:
         result.append(cos_sim(feature, query))
 
     ids = np.argsort(result)
-    print(len(ids))
     scores = [(result[id], img_path[id]) for id in ids]
-    
-    print('Cosine similarity')
     
     return scores
     
