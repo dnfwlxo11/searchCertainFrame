@@ -24,7 +24,7 @@ def setModel(model):
     elif (model == 'InceptionV3'):
         model = InceptionV3(weights='imagenet')
         model = Model(inputs=model.input, outputs=model.get_layer('avg_pool').output)
-    elif (model == 'EfficientNetB0'):
+    elif (model == 'EfficientNet-B0'):
         model = EfficientNetB0(weights='imagenet')
         model = Model(inputs=model.input, outputs=model.get_layer('avg_pool').output)
     elif (model == 'ResNet50'):

@@ -80,6 +80,43 @@ function getOptions() {
     return result;
 }
 
+function setPredict(src, dst) {
+    const base = player.getAttribute('src');
+    const result = document.getElementById('result-div');
+    const mode = src;
+
+    while (dst.hasChildNodes()) {
+        dst.removeChild(dst.firstChild);
+    }
+
+    Array.from(mode).forEach((item) => {
+        const split = item[1].split('/');
+        const second = split[split.length - 1].split('.')[0];
+        const a = document.createElement('a');
+        const li = document.createElement('li');
+
+        li.appendChild(a)
+        dst.appendChild(li);
+        li.addEventListener('click', () => {
+            player.setAttribute('src', setHref(base, second));
+        });
+
+        a.innerText = second;
+    })
+
+    result.appendChild(dst);
+}
+
+function showProgress() {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'block';
+}
+
+function hiddenProgress() {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+}
+
 function sendData() {
     const img = document.getElementById('img-file')
     const data = new FormData()
@@ -99,56 +136,25 @@ function sendData() {
         body: data
     }
 
+    showProgress();
+
     fetch('/api/startAnalyze', config)
         .then((res) => {
             res.json().then((data) => {
                 if (data.success) {
-                    const base = player.getAttribute('src');
-                    const result = document.getElementById('result-div');
-                    const cos = data.result_cos;
-                    const eunc = data.result_eunc;
-
-                    cos.reverse();
-
-                    while (result_ul_cos.hasChildNodes()) {
-                        result_ul_cos.removeChild(result_ul_cos.firstChild);
+                    if (data.mode === 'cos') {
+                        setPredict(data.result_cos, result_ul_cos);
+                        console.log('cos')
+                    } else {
+                        setPredict(data.result_eunc, result_ul_eunc);
+                        console.log('eunc')
                     }
-
-                    Array.from(cos).forEach((item) => {
-                        const split = item[1].split('/');
-                        const second = split[split.length - 1].split('.')[0];
-                        const a = document.createElement('a');
-                        const li = document.createElement('li');
-
-                        li.appendChild(a)
-                        result_ul_cos.appendChild(li);
-                        li.addEventListener('click', () => {
-                            player.setAttribute('src', setHref(base, second));
-                        });
-
-                        a.innerText = second;
-                    })
-
-                    // Array.from(eunc).forEach((item) => {
-                    //     const split = item[1].split('/')
-                    //     const second = split[split.length-1].split('.')[0]
-                    //     const a = document.createElement('a')
-
-                    //     result_ul_eunc.appendChild(a);
-                    //     a.addEventListener('click', () => {
-                    //         if (second !== 0 || second !== (data.len -1)) {
-                    //     player.setAttribute('src', setHref(base, second));
-                    //     a.innerText = second/3600 + '시간 ' + second%3600/60 + '분 ' + second%3600%60 + '초';
-                    // }
-                    //     });
-                    // })
-
-                    result.appendChild(result_ul_cos);
-                    // result.appendChild(result_ul_eunc);
                 } else {
-                    const msg = data.err === 'none_resol' ? '해당 동영상은 선택하신 해상도를 지원하지 않습니다.' : '해당 동영상은 선택하신 fps를 지원하지 않습니다.'
+                    const msg = data.err === 'none_resol' ? '해당 동영상은 선택하신 해상도를 지원하지 않습니다.' : data.err === 'none_fps' ? '해당 동영상은 선택하신 fps를 지원하지 않습니다.' : '1시간 이상의 동영상은 서비스하지 않습니다.'
                     alert(`에러가 발생했습니다. \n${msg}`)
                 }
             })
+
+            hiddenProgress();
         })
 }

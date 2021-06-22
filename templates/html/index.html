@@ -11,6 +11,12 @@
 
 <body>
     <div id="wrapper">
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <img id='progressBar' src="{{ url_for('static', filename='asset/progressBar.gif') }}" alt="loading...">
+                <p>동영상을 분석 중이며 재생 시간이 길수록 많은 시간이 소요됩니다.</p>
+            </div>
+        </div>
         <div class="top">
             <div id="video-div">
                 <h2>찾을 동영상</h2>
@@ -56,12 +62,12 @@
                 <div id="radio">
                     <h5>예측시 사용할 유사도 공식</h5>
                     <input type="radio" name="similar_calc" value="cos" checked>Cosin 유사도
-                    <input type="radio" name="similar_calc" value="eucn">Euclidian 유사도
+                    <input type="radio" name="similar_calc" value="eunc">Euclidian 유사도
                 </div>
                 <div id="radio">
                     <h5>찾을 동영상의 FPS</h5>
-                    <input type="radio" name="video_fps" value="24" checked>24FPS
-                    <input type="radio" name="video_fps" value="30">30FPS
+                    <input type="radio" name="video_fps" value="24">24FPS
+                    <input type="radio" name="video_fps" value="30" checked>30FPS
                     <input type="radio" name="video_fps" value="60">60FPS
                 </div>
                 <div id="radio">
@@ -76,8 +82,8 @@
                     <input type="radio" name="predict_li" value="3">3개
                     <input type="radio" name="predict_li" value="5">5개
                     <input type="radio" name="predict_li" value="10" checked>10개
-                    <input type="radio" name="predict_li" value="10">20개
-                    <input type="radio" name="predict_li" value="10">30개
+                    <input type="radio" name="predict_li" value="20">20개
+                    <input type="radio" name="predict_li" value="30">30개
                 </div>
             </div>
         </div>
