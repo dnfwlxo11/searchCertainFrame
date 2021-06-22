@@ -46,7 +46,7 @@
             <div id="option">
                 <div id="combo">
                     <h5>예측시 사용할 모델</h5>
-                    <select name="language">
+                    <select id="model">
                         <option value="VGG16">VGG16</option>
                         <option value="ResNet50">ResNet50</option>
                         <option value="InceptionV3">InceptionV3</option>
@@ -63,6 +63,13 @@
                     <input type="radio" name="video_fps" value="24" checked>24FPS
                     <input type="radio" name="video_fps" value="30">30FPS
                     <input type="radio" name="video_fps" value="60">60FPS
+                </div>
+                <div id="radio">
+                    <h5>찾을 동영상의 해상도</h5>
+                    <input type="radio" name="video_res" value="240p">240p
+                    <input type="radio" name="video_res" value="360p" checked>360p
+                    <input type="radio" name="video_res" value="480p">480p
+                    <input type="radio" name="video_res" value="720p">720p
                 </div>
                 <div id="radio">
                     <h5>결과값의 개수</h5>

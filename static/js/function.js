@@ -4,7 +4,12 @@ const file = document.getElementById('img-file'),
     hidden_url = document.getElementById('hidden-url'),
     thumbnail = document.getElementById('thumbnail'),
     result_ul_cos = document.getElementById('result-ul-cos'),
-    result_ul_eunc = document.getElementById('result-ul-eunc');
+    result_ul_eunc = document.getElementById('result-ul-eunc'),
+    model = document.getElementById('model'),
+    calc = document.getElementsByName('similar_calc'),
+    resol = document.getElementsByName('video_res'),
+    fps = document.getElementsByName('video_fps'),
+    len = document.getElementsByName('predict_li');
 
 hidden_url.hidden = true;
 
@@ -37,17 +42,57 @@ function setHref(base, second) {
     return `${base}?autoplay=1&start=${second}`;
 }
 
+function getOptions() {
+    let result = {
+        model: '',
+        calc: '',
+        fps: 0,
+        len: 0,
+        resol: ''
+    };
+
+    result.model = model.options[model.selectedIndex].text
+
+    Array.from(calc).forEach(item => {
+        if (item.checked) {
+            result.calc = item.value;
+        }
+    })
+
+    Array.from(fps).forEach(item => {
+        if (item.checked) {
+            result.fps = item.value;
+        }
+    })
+
+    Array.from(len).forEach(item => {
+        if (item.checked) {
+            result.len = item.value;
+        }
+    })
+
+    Array.from(resol).forEach(item => {
+        if (item.checked) {
+            result.resol = item.value;
+        }
+    })
+
+    return result;
+}
+
 function sendData() {
     const img = document.getElementById('img-file')
-
     const data = new FormData()
+
+    const result = getOptions();
+
     data.append('file', img.files[0]);
     data.append('url', getVideo());
-    data.append('model', 'InceptionV3');
-    data.append('calc', 'cos');
-    data.append('fps', 30);
-    data.append('resol', '360p');
-    data.append('len', 10);
+    data.append('model', result.model);
+    data.append('calc', result.calc);
+    data.append('fps', result.fps);
+    data.append('resol', result.resol);
+    data.append('len', result.len);
 
     const config = {
         method: 'POST',
