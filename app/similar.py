@@ -45,8 +45,6 @@ def feature_extractor(model, img):
     feature = model.predict(x)[0]
     return feature / np.linalg.norm(feature)
 
-
-
 # 특정 디렉토리 내의 이미지들 경로를 추출
 def getImageDB_li(dirName):
     imageDB_li = os.listdir('static/{}/{}/'.format(dirName, dirName))

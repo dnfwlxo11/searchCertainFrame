@@ -3,8 +3,7 @@ const file = document.getElementById('img-file'),
     link = document.getElementById('video-link'),
     hidden_url = document.getElementById('hidden-url'),
     thumbnail = document.getElementById('thumbnail'),
-    result_ul_cos = document.getElementById('result-ul-cos'),
-    result_ul_eunc = document.getElementById('result-ul-eunc'),
+    result_ul = document.getElementById('result-ul'),
     model = document.getElementById('model'),
     calc = document.getElementsByName('similar_calc'),
     resol = document.getElementsByName('video_res'),
@@ -80,31 +79,27 @@ function getOptions() {
     return result;
 }
 
-function setPredict(src, dst) {
+function setPredict(src) {
     const base = player.getAttribute('src');
-    const result = document.getElementById('result-div');
-    const mode = src;
 
-    while (dst.hasChildNodes()) {
-        dst.removeChild(dst.firstChild);
+    while (result_ul.hasChildNodes()) {
+        result_ul.removeChild(result_ul.firstChild);
     }
 
-    Array.from(mode).forEach((item) => {
+    Array.from(src).forEach((item) => {
         const split = item[1].split('/');
         const second = split[split.length - 1].split('.')[0];
         const a = document.createElement('a');
         const li = document.createElement('li');
 
         li.appendChild(a)
-        dst.appendChild(li);
+        result_ul.appendChild(li);
         li.addEventListener('click', () => {
             player.setAttribute('src', setHref(base, second));
         });
 
         a.innerText = second;
     })
-
-    result.appendChild(dst);
 }
 
 function showProgress() {
@@ -143,11 +138,11 @@ function sendData() {
             res.json().then((data) => {
                 if (data.success) {
                     if (data.mode === 'cos') {
-                        setPredict(data.result_cos, result_ul_cos);
+                        setPredict(data.result_cos);
                         console.log('cos')
                     } else {
-                        setPredict(data.result_eunc, result_ul_eunc);
-                        console.log('eunc')
+                        setPredict(data.result_eucl);
+                        console.log('eucl')
                     }
                 } else {
                     const msg = data.err === 'none_resol' ? '해당 동영상은 선택하신 해상도를 지원하지 않습니다.' : data.err === 'none_fps' ? '해당 동영상은 선택하신 fps를 지원하지 않습니다.' : '1시간 이상의 동영상은 서비스하지 않습니다.'

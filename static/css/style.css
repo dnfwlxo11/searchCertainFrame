@@ -57,7 +57,13 @@ li {
 
 #result-div {
     width: 20%;
+    height: 100%;
     float: left;
+}
+
+#scroll-div {
+    overflow: auto;
+    height: 100%;
 }
 
 #result-div li {

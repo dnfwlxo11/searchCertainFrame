@@ -24,7 +24,7 @@
                     frameborder="0"></iframe>
                 <div id="input-div">
                     <input id="input" type="file"></input>
-                    <button id="input-btn" onclick="getVideo()">내 동영상 가져오기</button>
+                    <button id="input-btn" onclick="alert('아직 지원하지 않습니다.')">내 동영상 가져오기</button>
                 </div>
                 <div id="input-div">
                     <input id="video-link" type="text"></input>
@@ -43,8 +43,9 @@
             </div>
             <div id="result-div">
                 <h2>예상되는 재생 시간</h2>
-                <ul id="result-ul-cos"></ul>
-                <ul id="result-ul-eunc"></ul>
+                <div id="scroll-div">
+                    <ul id="result-ul"></ul>
+                </div>
             </div>
         </div>
         <br>

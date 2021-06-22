@@ -31,11 +31,11 @@ def getSimilarPart():
                 result_cos.reverse()
 
                 return {'success': True, 'path': req['url'], 'result_cos': result_cos[:int(req['len'])], 'len': len(result_cos), 'mode': 'cos'}
-            elif (req['calc'] == 'eunc'):
-                result_eunc = similar.calc_euclienan(features, img_path, 'static/{}/{}.jpg'.format(videoId, videoId))
-                result_eunc = [(str(k), v) for (k, v) in result_eunc]
+            elif (req['calc'] == 'eucl'):
+                result_eucl = similar.calc_euclienan(features, img_path, 'static/{}/{}.jpg'.format(videoId, videoId))
+                result_eucl = [(str(k), v) for (k, v) in result_eucl]
 
-                return {'success': True, 'path': req['url'], 'result_cos': result_eunc[:int(req['len'])], 'len': len(result_eunc), 'mode': 'eunc'}
+                return {'success': True, 'path': req['url'], 'result_eucl': result_eucl[:int(req['len'])], 'len': len(result_eucl), 'mode': 'eucl'}
         else:
             return {'success': False, 'err': videoId['err']}
 
