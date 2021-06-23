@@ -1,4 +1,4 @@
-import os, cv2
+import os, cv2, math
 
 # 비디오로 데이터베이스를 만들고 싶을때
 def extractFrame(video, fps):
@@ -8,6 +8,9 @@ def extractFrame(video, fps):
     if not os.path.exists('static/{}/{}'.format(video, video)):
         os.mkdir('static/{}/{}'.format(video, video))
     
+    if (vid.get(cv2.CAP_PROP_FPS)):
+        fps = math.floor(vid.get(cv2.CAP_PROP_FPS))
+
     while True:
         ret, image = vid.read()
         
