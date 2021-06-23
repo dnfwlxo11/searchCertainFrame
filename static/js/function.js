@@ -31,12 +31,12 @@ img_file.onchange = () => {
 function getVideo_local() {
     let reader = new FileReader();
 
-    link.value = '';
-    player.style.display = 'none';
-    local_player.style.display = 'block';
-
     if (video_file.files[0] !== undefined) {
         showProgress();
+
+        link.value = '';
+        player.style.display = 'none';
+        local_player.style.display = 'block';
 
         reader.readAsDataURL(video_file.files[0]);
 
