@@ -160,5 +160,9 @@ try:
 except:
     pass
 
+model = EfficientNetB0(weights='imagenet')
+model = InceptionV3(weights='imagenet')
+model = ResNet50(weights='imagenet')
+
 model = VGG16(weights='imagenet')
 model = Model(inputs=model.input, outputs=model.get_layer('fc1').output)

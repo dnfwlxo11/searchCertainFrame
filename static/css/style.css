@@ -75,7 +75,7 @@ li {
     margin-left: 25vh;
 }
 
-#combo, #radio {
+#combo, #resol, #fps, #calc, #pred_li {
     float: left;
     margin-right: 50px;
 }

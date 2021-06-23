@@ -6,7 +6,7 @@ import os
 def saveVideo(src, fps, resol):
     yt = YouTube(src)
 
-    if yt.length > 3600:
+    if yt.length >= 3600:
         return {'success': False, 'err': 'too long'}
 
     if not (yt.streams.filter(progressive=True, file_extension='mp4', fps=fps)):
