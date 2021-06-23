@@ -97,7 +97,6 @@ def speedMode(dirName, src, len):
         speed_features.append(features[index])
         speed_imgPath.append(img_path[index])
 
-    print(speed_features, speed_imgPath)
     return speed_features[:int(len)], speed_imgPath[:int(len)]
 
 def getFeatureAndPath(dirName):

@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>시간은 없고, 어딘가 있긴하고</title>
@@ -14,7 +13,7 @@
         <div id="modal" class="modal">
             <div class="modal-content">
                 <img id='progressBar' src="{{ url_for('static', filename='asset/progressBar.gif') }}" alt="loading...">
-                <p>동영상을 분석 중이며 재생 시간이 길수록 많은 시간이 소요됩니다.</p>
+                <p>로딩 중이며 재생 시간이 길수록 많은 시간이 소요됩니다.</p>
             </div>
         </div>
         <div class="top">
@@ -22,13 +21,16 @@
                 <h2>찾을 동영상</h2>
                 <iframe id='player' src="{{ url_for('static', filename='asset/thumbnail.png') }}"
                     frameborder="0"></iframe>
+                <video id="local-player" poster="{{ url_for('static', filename='asset/thumbnail.png') }}" controls loop>
+                    <source id="video-source" src="" type="video/mp4">
+                </video>
                 <div id="input-div">
-                    <input id="input" type="file"></input>
-                    <button id="input-btn" onclick="alert('아직 지원하지 않습니다.')">내 동영상 가져오기</button>
+                    <input id="video-file" name="file" type="file" accept="video/*"></input>
+                    <button id="input-btn" onclick="getVideo_local()">내 동영상 가져오기</button>
                 </div>
                 <div id="input-div">
                     <input id="video-link" type="text"></input>
-                    <button id="input-btn" onclick="getVideo()">동영상 가져오기</button>
+                    <button id="input-btn" onclick="getVideo_youtube()">동영상 가져오기</button>
                 </div>
             </div>
             <div id="img-div">

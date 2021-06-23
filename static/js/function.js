@@ -1,5 +1,8 @@
-const file = document.getElementById('img-file'),
+const img_file = document.getElementById('img-file'),
+    video_file = document.getElementById('video-file'),
     player = document.getElementById('player'),
+    local_player = document.getElementById('local-player'),
+    video_source = document.getElementById('video-source'),
     link = document.getElementById('video-link'),
     hidden_url = document.getElementById('hidden-url'),
     thumbnail = document.getElementById('thumbnail'),
@@ -13,19 +16,55 @@ const file = document.getElementById('img-file'),
 
 hidden_url.hidden = true;
 
-file.onchange = () => {
+img_file.onchange = () => {
     let reader = new FileReader();
 
-    reader.readAsDataURL(file.files[0]);
+    reader.readAsDataURL(img_file.files[0]);
 
     reader.onload = () => {
         thumbnail.setAttribute('src', reader.result);
     }
 }
 
-function getVideo() {
+function getVideo_local() {
+    let reader = new FileReader();
+
+    link.value = '';
+    player.style.display = 'none';
+    local_player.style.display = 'block';
+
+    if (video_file.files[0] !== undefined) {
+        showProgress();
+
+        reader.readAsDataURL(video_file.files[0]);
+
+        reader.onload = () => {
+            video_source.setAttribute('src', reader.result + '#t=0.1');
+            player.setAttribute('src', '/static/asset/thumbnail.png');
+            hidden_url.setAttribute('value', '');
+
+            setTimeout(() => {
+                local_player.load();
+                hiddenProgress();
+            }, 0);
+        }
+    } else {
+        video_source.setAttribute('src', '');
+        local_player.load();
+        alert('비디오를 선택해주세요.');
+    }
+}
+
+function getVideo_youtube() {
+    showProgress();
+    local_player.style.display = 'none';
+    player.style.display = 'block';
+
     player.setAttribute('src', `https://youtube.com/embed/${splitVideoId(link.value)}`);
     hidden_url.setAttribute('value', `https://youtube.com/embed/${splitVideoId(link.value)}`);
+    video_file.value = ''
+
+    hiddenProgress();
 
     return `https://youtube.com/embed/${splitVideoId(link.value)}`
 }
@@ -49,15 +88,24 @@ function getOptions() {
         fps: 0,
         len: 0,
         resol: '',
-        mode: 'normal'
+        mode: 'normal',
+        type: ''
     };
 
     result.model = model.options[model.selectedIndex].text
 
     if (speed.checked)
-        result.mode = 'speed'
+        result.mode = 'speed';
     else
-        result.mode = 'normal'
+        result.mode = 'normal';
+
+    if (video_file.value !== '') {
+        result.type = 'local';
+    } else if (player.getAttribute('src').includes('youtube')) {
+        result.type = 'youtube';
+    } else {
+        result.type = 'none';
+    }
 
     Array.from(calc).forEach(item => {
         if (item.checked) {
@@ -125,37 +173,42 @@ function sendData() {
 
     const result = getOptions();
 
-    data.append('file', img.files[0]);
-    data.append('url', getVideo());
-    data.append('model', result.model);
-    data.append('calc', result.calc);
-    data.append('fps', result.fps);
-    data.append('resol', result.resol);
-    data.append('len', result.len);
-    data.append('mode', result.mode);
+    console.log(result.type)
+    if (result.type !== 'none' && img_file.value !== '') {
+        data.append('file', img.files[0]);
+        result.type === 'youtube' ? data.append('url', getVideo_youtube()) : data.append('url', getVideo_local())
+        data.append('model', result.model);
+        data.append('calc', result.calc);
+        data.append('fps', result.fps);
+        data.append('resol', result.resol);
+        data.append('len', result.len);
+        data.append('mode', result.mode);
 
-    const config = {
-        method: 'POST',
-        body: data
-    }
+        const config = {
+            method: 'POST',
+            body: data
+        }
 
-    showProgress();
+        showProgress();
 
-    fetch('/api/startAnalyze', config)
-        .then((res) => {
-            res.json().then((data) => {
-                if (data.success) {
-                    if (data.mode === 'cos') {
-                        setPredict(data.result_cos);
+        fetch('/api/startAnalyze', config)
+            .then((res) => {
+                res.json().then((data) => {
+                    if (data.success) {
+                        if (data.mode === 'cos') {
+                            setPredict(data.result_cos);
+                        } else {
+                            setPredict(data.result_eucl);
+                        }
                     } else {
-                        setPredict(data.result_eucl);
+                        const msg = data.err === 'none_resol' ? '해당 동영상은 선택하신 해상도를 지원하지 않습니다.' : data.err === 'none_fps' ? '해당 동영상은 선택하신 fps를 지원하지 않습니다.' : '1시간 이상의 동영상은 서비스하지 않습니다.'
+                        alert(`에러가 발생했습니다. \n${msg}`)
                     }
-                } else {
-                    const msg = data.err === 'none_resol' ? '해당 동영상은 선택하신 해상도를 지원하지 않습니다.' : data.err === 'none_fps' ? '해당 동영상은 선택하신 fps를 지원하지 않습니다.' : '1시간 이상의 동영상은 서비스하지 않습니다.'
-                    alert(`에러가 발생했습니다. \n${msg}`)
-                }
-            })
+                })
 
-            hiddenProgress();
-        })
+                hiddenProgress();
+            })
+    } else {
+        alert('동영상이나 비교 이미지 업로드 상태를 다시 확인해주세요.\n계속해서 에러 발생시 새로고침 후 다시 진행해주세요.')
+    }
 }
