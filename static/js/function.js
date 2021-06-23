@@ -77,7 +77,11 @@ function move(time) {
     player.setAttribute('src', `https://youtube.com/embed/${splitVideoId(link.value)}?autoplay=1&start=${time}`);
 }
 
-function setHref(base, second) {
+function setHref_local(base, second) {
+    return `${base}#t=${second}`;
+}
+
+function setHref_youtube(base, second) {
     return `${base}?autoplay=1&start=${second}`;
 }
 
@@ -134,8 +138,13 @@ function getOptions() {
     return result;
 }
 
-function setPredict(src) {
-    const base = player.getAttribute('src');
+function setPredict(src, type) {
+    let base = ''
+
+    if (type === 'youtube')
+        base = player.getAttribute('src');
+    else
+        base = video_source.getAttribute('src').split('#t=')[0];
 
     while (result_ul.hasChildNodes()) {
         result_ul.removeChild(result_ul.firstChild);
@@ -150,7 +159,12 @@ function setPredict(src) {
         li.appendChild(a)
         result_ul.appendChild(li);
         li.addEventListener('click', () => {
-            player.setAttribute('src', setHref(base, second));
+            if (type === 'youtube') {
+                player.setAttribute('src', setHref_youtube(base, second));
+            } else {
+                local_player.setAttribute('src', setHref_local(base, second));
+                local_player.play();
+            }
         });
 
         a.innerText = second;
@@ -169,20 +183,21 @@ function hiddenProgress() {
 
 function sendData() {
     const img = document.getElementById('img-file')
+    const video = document.getElementById('video-file')
     const data = new FormData()
 
     const result = getOptions();
 
-    console.log(result.type)
     if (result.type !== 'none' && img_file.value !== '') {
-        data.append('file', img.files[0]);
-        result.type === 'youtube' ? data.append('url', getVideo_youtube()) : data.append('url', getVideo_local())
+        data.append('thumbnail', img.files[0]);
+        result.type === 'youtube' ? data.append('url', getVideo_youtube()) : data.append('inputVideo', video.files[0]);
         data.append('model', result.model);
         data.append('calc', result.calc);
         data.append('fps', result.fps);
         data.append('resol', result.resol);
         data.append('len', result.len);
         data.append('mode', result.mode);
+        data.append('type', result.type);
 
         const config = {
             method: 'POST',
@@ -196,9 +211,9 @@ function sendData() {
                 res.json().then((data) => {
                     if (data.success) {
                         if (data.mode === 'cos') {
-                            setPredict(data.result_cos);
+                            setPredict(data.result_cos, result.type);
                         } else {
-                            setPredict(data.result_eucl);
+                            setPredict(data.result_eucl, result.type);
                         }
                     } else {
                         const msg = data.err === 'none_resol' ? '해당 동영상은 선택하신 해상도를 지원하지 않습니다.' : data.err === 'none_fps' ? '해당 동영상은 선택하신 fps를 지원하지 않습니다.' : '1시간 이상의 동영상은 서비스하지 않습니다.'

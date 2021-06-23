@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for
-from app import similar, ytSave, splitVideo
+from app import similar, ytSave, splitVideo, localSave
 
 app = Flask(__name__)
 
@@ -12,12 +12,15 @@ def getSimilarPart():
     req = request.form
 
     if (request.method == 'POST'):
-        videoId = ytSave.saveVideo(req['url'], int(req['fps']), req['resol'])
+        if (req['type'] == 'youtube'):
+            videoId = ytSave.saveVideo(req['url'], int(req['fps']), req['resol'])
+        else:
+            videoId = localSave.saveVideo(request.files['inputVideo'])
 
         if (videoId['success']):
             videoId = splitVideo.extractFrame('newVideo_{}'.format(videoId['name']), int(req['fps']))
 
-            request.files['file'].save('static/{}/{}.jpg'.format(videoId, videoId))
+            request.files['thumbnail'].save('static/{}/{}.jpg'.format(videoId, videoId))
 
             similar.setModel(req['model'])
             similar.setImageDB(similar.getImageDB_li(videoId), videoId)
@@ -33,12 +36,12 @@ def getSimilarPart():
 
                 result_cos.reverse()
 
-                return {'success': True, 'path': req['url'], 'result_cos': result_cos[:int(req['len'])], 'len': len(result_cos), 'mode': 'cos'}
+                return {'success': True, 'result_cos': result_cos[:int(req['len'])], 'len': len(result_cos), 'mode': 'cos'}
             elif (req['calc'] == 'eucl'):
                 result_eucl = similar.calc_euclienan(features, img_path, 'static/{}/{}.jpg'.format(videoId, videoId))
                 result_eucl = [(str(k), v) for (k, v) in result_eucl]
 
-                return {'success': True, 'path': req['url'], 'result_eucl': result_eucl[:int(req['len'])], 'len': len(result_eucl), 'mode': 'eucl'}
+                return {'success': True, 'result_eucl': result_eucl[:int(req['len'])], 'len': len(result_eucl), 'mode': 'eucl'}
         else:
             return {'success': False, 'err': videoId['err']}
 

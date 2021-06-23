@@ -12,9 +12,11 @@ def extractFrame(video, fps):
         ret, image = vid.read()
         
         if (int(vid.get(1)) % fps == 0):
-            # print('static/{}/{}/'.format(video, video) + '{}.jpg'.format(count))
-            cv2.imwrite('static/{}/{}/'.format(video, video) + '{}.jpg'.format(count), image)
-            count += 1
+            try:
+                cv2.imwrite('static/{}/{}/'.format(video, video) + '{}.jpg'.format(count), image)
+                count += 1
+            except Exception as e:
+                print(e)
             
         if not ret:
             break
