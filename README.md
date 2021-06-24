@@ -19,7 +19,7 @@ python run.py
 ##### 2. If you are installing from a docker hub image  
 #####    만약 도커 허브에 있는 이미지로 설치를 하는 경우
 ```
-# link : https://hub.docker.com/repository/docker/dnfwlxo11/video_analyze#
+# link : https://hub.docker.com/r/dnfwlxo11/video_analyze
 
 docker pull dnfwlxo11/video_analyze:v1  
 docker run --rm -it -p 16000:15000 --name=videoAnalyze dnfwlxo11/video_analyze:v1  
