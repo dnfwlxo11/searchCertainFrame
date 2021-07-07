@@ -48,3 +48,4 @@ docker run --rm -it -p 16000:15000 --name=videoAnalyze dnfwlxo11/video_analyze:v
 
 Both cpu and gpu work, and it is about 60% faster when running on gpu.  
 cpu, gpu 모두 동작하며 gpu로 실행시 60퍼센트 정도 빠르다.  
+  

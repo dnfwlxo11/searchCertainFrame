@@ -51,51 +51,7 @@
             </div>
         </div>
         <br>
-        <div class="bottom">
-            <div id="option">
-                <div id="checkbox">
-                    <label>
-                        <input id="mode" type="checkbox" name="color" value="blue">스피드 모드 
-                        (정확도는 낮아지지만 영상이 길수록 효과가 좋습니다.)
-                    </label>
-                </div>
-                <div id="combo">
-                    <h5>예측시 사용할 모델</h5>
-                    <select id="model">
-                        <option value="VGG16">VGG16</option>
-                        <option value="ResNet50">ResNet50</option>
-                        <option value="InceptionV3">InceptionV3</option>
-                        <option value="EfficientNet-B0">EfficientNet-B0</option>
-                    </select>
-                </div>
-                <div id="calc">
-                    <h5>예측시 사용할 유사도 공식</h5>
-                    <input type="radio" name="similar_calc" value="cos" checked>Cosin 유사도
-                    <input type="radio" name="similar_calc" value="eunc">Euclidian 유사도
-                </div>
-                <div id="fps">
-                    <h5>찾을 동영상의 FPS</h5>
-                    <input type="radio" name="video_fps" value="24">24FPS
-                    <input type="radio" name="video_fps" value="30" checked>30FPS
-                    <input type="radio" name="video_fps" value="60">60FPS
-                </div>
-                <div id="resol">
-                    <h5>찾을 동영상의 해상도</h5>
-                    <input type="radio" name="video_res" value="240p">240p
-                    <input type="radio" name="video_res" value="360p" checked>360p
-                    <input type="radio" name="video_res" value="480p">480p
-                    <input type="radio" name="video_res" value="720p">720p
-                </div>
-                <div id="pred_li">
-                    <h5>결과값의 개수</h5>
-                    <input type="radio" name="predict_li" value="3">3개
-                    <input type="radio" name="predict_li" value="5">5개
-                    <input type="radio" name="predict_li" value="10" checked>10개
-                    <input type="radio" name="predict_li" value="20">20개
-                    <input type="radio" name="predict_li" value="30">30개
-                </div>
-            </div>
-        </div>
+        
     </div>
 </body>
 <script src="{{ url_for('static', filename='js/function.js') }}"></script>
