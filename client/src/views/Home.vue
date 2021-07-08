@@ -51,13 +51,13 @@
           </div>
         </div>
         <div class="col-md-4 mt-3">
-          <div class="ml-3 mb-5">
+          <div class="ml-3 mb-5 text-center">
             <div class="mb-3">
               <label @click="setSpeed">
                 <input type="checkbox" name="color" value="blue">스피드 모드
               </label>
             </div>
-            <div class="mb-3">
+            <div class="mb-5">
               <h4>예측 모델</h4>
               <select v-model="model">
                 <option value="VGG16">VGG16</option>
@@ -66,25 +66,25 @@
                 <option value="EfficientNet-B0">EfficientNet-B0</option>
               </select>
             </div>
-            <div class="mb-3">
+            <div class="mb-5">
               <h4>유사도 공식</h4>
               <input type="radio" name="similar_calc" value="cosc" v-model="calc">Cosin 유사도
               <input type="radio" name="similar_calc" value="eunc" v-model="calc">Euclidian 유사도
             </div>
-            <div v-if="!speed" class="mb-3">
+            <div v-if="!speed" class="mb-5">
               <h4>FPS</h4>
               <input type="radio" name="video_fps" value="24" v-model="fps">24FPS
               <input type="radio" name="video_fps" value="30" v-model="fps">30FPS
               <input type="radio" name="video_fps" value="60" v-model="fps">60FPS
             </div>
-            <div v-if="!speed" class="mb-3">
+            <div v-if="!speed" class="mb-5">
               <h4>해상도</h4>
               <input type="radio" name="video_res" value="240p" v-model="resol">240p
               <input type="radio" name="video_res" value="360p" v-model="resol">360p
               <input type="radio" name="video_res" value="480p" v-model="resol">480p
               <input type="radio" name="video_res" value="720p" v-model="resol">720p
             </div>
-            <div class="mb-3">
+            <div class="mb-5">
               <h4>결과값 개수</h4>
               <input type="radio" name="predict_li" value="3" v-model="listSize">3개
               <input type="radio" name="predict_li" value="5" v-model="listSize">5개
@@ -93,7 +93,7 @@
               <input type="radio" name="predict_li" value="30" v-model="listSize">30개
             </div>
           </div>
-          <div class="row overflow-auto" style="max-height: 400px">
+          <div class="row-md ml-3 overflow-auto text-center" style="max-height: 200px">
             <ul class="list-group" v-if="isData">
               <li class="list-group-item" v-for="(item, index) of analyzeData" :key="index">
                 <a class="" v-if="!mode" @click="youtubeVideo = item[0]">{{ item[1] }}</a>
@@ -262,6 +262,10 @@
 </script>
 
 <style>
+  a {
+    display: block;
+  }
+
   li {
     list-style: none;
   }
