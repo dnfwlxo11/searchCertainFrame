@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="container p-3">
+    <div class="container mt-3">
       <div v-if="progress" class="progress-modal">
         <div class="progress-modal-content">
           <img src="../assets/progressBar.gif" alt="loading...">
@@ -36,21 +36,19 @@
           <div class="row">
             <div class="input-group col-md-6">
               <h4>찾고자 하는 대상</h4>
-              <div class="embed-responsive embed-responsive-16by9 mb-3">
+              <div class="embed-responsive embed-responsive-16by9">
                 <a href="javascript:;" class="d-block" @click="$refs.inputImgFile.click()">
                   <img class="embed-responsive-item" :src="thumbnail">
                 </a>
               </div>
-              <input class="mb-3" name='thumbnail' ref="inputImgFile" type="file" accept="image/*" style="visibility: hidden" @change="uploadImage">
+              <input class="mb-3" name='thumbnail' ref="inputImgFile" type="file" accept="image/*" style="display: none" @change="uploadImage">
             </div>
             <div class="col-md-6 m-auto">
-              <div>
                 <button class="btn btn-block btn-warning" @click="startAnalyze">분석 시작</button>
-              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-4 mt-3">
+        <div class="col-md-4 mt-5">
           <div class="ml-3 mb-5 text-center">
             <div class="mb-3">
               <label @click="setSpeed">
@@ -222,7 +220,7 @@
           form.append(key, sendData[key]);
 
         let res = await axios({
-          url: 'http://192.168.0.106:5000/api/startAnalyze',
+          url: 'http://localhost:5000/api/startAnalyze',
           method: 'POST',
           headers: {
             'Content-Type': 'multipart/form-data'

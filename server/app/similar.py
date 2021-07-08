@@ -15,7 +15,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-import tensorflow as tf
+# import tensorflow as tf
 
 # 특징 추출할때 사용할 모델 선택
 def setModel(model):
@@ -133,17 +133,12 @@ def calc_cossim(features, img_path, src):
     
     return scores
 
-os.environ["CUDA_VISIBLE_DEVICES"]= '0'
+# os.environ["CUDA_VISIBLE_DEVICES"]= '0'
 
-physical_devices = tf.config.list_physical_devices('GPU')
-try:
-    tf.config.experimental.set_memory_growth(physical_devices[0], True)
-except:
-    pass
+# physical_devices = tf.config.list_physical_devices('GPU')
+# try:
+#     tf.config.experimental.set_memory_growth(physical_devices[0], True)
+# except:
+#     pass
 
-model = EfficientNetB0(weights='imagenet')
-model = InceptionV3(weights='imagenet')
-model = ResNet50(weights='imagenet')
-
-model = VGG16(weights='imagenet')
-model = Model(inputs=model.input, outputs=model.get_layer('fc1').output)
+setModel('VGG16')

@@ -2,14 +2,6 @@ from flask import Flask, render_template, request, url_for, Response
 from app import similar, ytSave, splitVideo, localSave
 from flask_cors import CORS
 
-# Flask에서 Jinja2를 사용하여 렌더링 할 시, Vue의 {{ }}를 렌더링하지 않도록 옵션을 추가해야함
-class CustomFlask(Flask):
-    jinja_options = Flask.jinja_options.copy()
-    jinja_options.update(dict(
-        variable_start_string = '%%', # Default is '{{', I'm changing this because Vue.js uses '{{' / '}}'
-        variable_end_string = '%%',
-    ))
-
 app = Flask(__name__, static_url_path="/", static_folder="static")
  
 @app.route('/')
@@ -19,8 +11,10 @@ def index():
 @app.route('/api/startAnalyze', methods=['POST', 'GET'])
 def getSimilarPart():
     req = request.form
+    print('1')
 
     if (request.method == 'POST'):
+        print('2')
         try:
             if (req['type'] == 'youtube'):
                 videoId = ytSave.saveVideo(req['url'], int(req['fps']), req['resol'])
@@ -28,24 +22,25 @@ def getSimilarPart():
                 videoId = localSave.saveVideo(request.files['url'])
         except Exception as e:
             print(e)
-            return Response('{"success": false, "msg": "비디오 저장 중 에러가 발생했습니다."}', status=500, mimetype='application/json')
+            return Response('{"success": false, "msg": "옵션 중 비디오가 지원하지 않는 옵션이 있습니다. 옵션을 변경해주세요."}', status=500, mimetype='application/json')
 
         if (videoId['success']):
             videoId = splitVideo.extractFrame('newVideo_{}'.format(videoId['name']), int(req['fps']))
-
+            print('3')
             try:
                 request.files['thumbnail'].save('static_bac/{}/{}.jpg'.format(videoId, videoId))
             except Exception as e:
                 print(e)
                 return Response('{"success": false, "msg": "검색 이미지 저장 중 에러가 발생했습니다."}', status=500, mimetype='application/json')
-
+            print('4')
             try:
                 similar.setModel(req['model'])
                 similar.setImageDB(similar.getImageDB_li(videoId), videoId)
             except Exception as e:
                 print(e)
                 return Response('{"success": false, "msg": "비디오 분석 중 에러가 발생했습니다."}', status=500, mimetype='application/json')
-                    
+
+            print('5')  
             try:
                 if (req['mode'] == 'speed'):
                     features, img_path = similar.speedMode(videoId, 'static_bac/{}/{}.jpg'.format(videoId, videoId), int(req['len']))
@@ -55,6 +50,7 @@ def getSimilarPart():
                 print(e)
                 return Response('{"success": false, "msg": "실행 모드 설정 중 에러가 발생했습니다."}', status=500, mimetype='application/json')
 
+            print('6')
             try:
                 if (req['calc'] == 'cosc'):
                     result_cos = similar.calc_cossim(features, img_path, 'static_bac/{}/{}.jpg'.format(videoId, videoId))
