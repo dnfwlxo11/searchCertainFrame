@@ -9,10 +9,10 @@ def saveVideo(src):
     hash_.update(now_time.encode())
     directory_name = hash_.hexdigest()
 
-    if not os.path.exists('static/newVideo_{}'.format(directory_name)):
-        os.mkdir('static/newVideo_{}'.format(directory_name))
+    if not os.path.exists('static_bac/newVideo_{}'.format(directory_name)):
+        os.mkdir('static_bac/newVideo_{}'.format(directory_name))
 
-    savePath = 'static/newVideo_{}'.format(directory_name)
+    savePath = 'static_bac/newVideo_{}'.format(directory_name)
     src.save('{}/newVideo_{}.mp4'.format(savePath, directory_name))
 
     return {'success': True, 'name': directory_name}

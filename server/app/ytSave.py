@@ -20,12 +20,12 @@ def saveVideo(src, fps, resol):
         hash_.update(now_time.encode())
         directory_name = hash_.hexdigest()
 
-        if not os.path.exists('static/newVideo_{}'.format(directory_name)):
-            os.mkdir('static/newVideo_{}'.format(directory_name))
+        if not os.path.exists('static_bac/newVideo_{}'.format(directory_name)):
+            os.mkdir('static_bac/newVideo_{}'.format(directory_name))
 
         vids = yt.streams.filter(progressive=True, file_extension='mp4', res=resol, fps=fps).first()
 
-        savePath = 'static/newVideo_{}'.format(directory_name)
+        savePath = 'static_bac/newVideo_{}'.format(directory_name)
         vids.download(savePath, filename='newVideo_{}'.format(directory_name))
 
         return {'success': True, 'name': directory_name}
